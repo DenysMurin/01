@@ -1,55 +1,64 @@
-const todoApp = {
-  list: {
-    english: "done",
-    italiano: "done",
-    francais: "in progress",
-    suomi: "not yet",
-    russian: "done",
-    portugues: "not yet",
-  },
-  showList() {
-    for (const task in this.list) {
-      console.log(`${task}: ${this.list[task]}`);
-    }
-  },
- 
+const list = [
+  { name: "create a post", status: "In progress", priority: "low" },
+  { name: "test", status: "Done", priority: "high" },
+  { name: "learn italian", status: "Not yet", priority: "medium" },
+  { name: "read 50 pages", status: "Not yet", priority: "low" },
+];
+// !вывод исходного массива
+console.log(`исходный массив`, list);
 
-  addTask(task, state) {
-    if (task.length < 50) {
-      this.list[task] = state;
+// !добавление новой задачи
+const addTask = (task, state) => {
+  if (task.length < 50) {
+    if (task in list) {
+      console.log("Такая задача уже есть.");
     } else {
-      console.log(`длина задачи ${task} должна быть меньше 50 символов`);
+      list.push({ name: task, status: state, priority: "low" });
     }
-    if (task in this.list) {
-      console.log("такая задача уже есть");
-    }
-  },
-  changeState(task, state) {
-    this.list[task] = state;
-  },
-  delTask(task) {
-    delete this.list[task];
-  },
+  } else {
+    console.log(`Длина задачи ${task} должна быть меньше 50 символов.`);
+  }
 };
 
-  
-// изначально
-todoApp.showList();
-  
-// добавляем
-todoApp.addTask("to do", "yes");
-todoApp.addTask("НадоПойтиПогулятьПотомПоестьБорщаСделавПредварительноДомашку", "yes");
-  
-  
-// изменяем
-todoApp.changeState("english","не хочу, бля, нахуй")
+// !удаление задачи
+const delTask = (taskName) => {
+  const taskIndex = list.findIndex((task) => task.name === taskName);   
+    list.splice(taskIndex, 1);
 
-  
-// удаляем
-todoApp.delTask("suomi")
+};
 
-// после преобразований
-console.log("     после преобразований");
+// ! замена статуса
+const changeState = (taskName, state) => {
+  const index = list.findIndex((task) => task.name === taskName);
+    list[index].status = state;
+};
+// !сортировка статуса
 
-todoApp.showList();
+function showList(statusName){
+  list.sort((a, b) => {
+  if (a.status < b.status) return -1;
+  if (a.status > b.status) return 1;
+    // return 0
+    console.log(list.map((task) => task.name));
+})
+};
 
+changeState("learn italian", "In progress")
+delTask("test");
+
+addTask("новое", "Not yet", "high");
+addTask("новое2", "A", "high");
+addTask("новое3", "A", "high");
+addTask("новое4", "B", "high");
+
+// вывод всего массива
+list.forEach((user) => {
+  console.log(user);
+});
+showList()
+// вывод всех задач в массив
+console.log(list.map((user) => user.name));
+// вывод всех статусов
+console.log(list.map((user) => user.status));
+// вывод всех приоритетов
+console.log(list.map((user) => user.priority));
